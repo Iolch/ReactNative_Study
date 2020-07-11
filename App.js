@@ -7,6 +7,7 @@ import {
   Text,
   TextInput,
   View,
+  FlatList,   // basically flatlist is like the infinity list of angular
 } from 'react-native';
 
 export default function App(){
@@ -18,9 +19,9 @@ export default function App(){
   const goalInputHandler = (inputText) => {setEnteredGoal(inputText)};
 
   // This would also work
-  // const addGoalHandler = () => { setCourseGoals([...courseGoals, enteredGoal])}; // Concatenation of the array course goals, with new one 
-  const addGoalHandler = () => { setCourseGoals(currentGoals => [...currentGoals, enteredGoal])}; // Guarantee we have the most updated courseGoals 
-  
+  // const addGoalHandler = () => { setCourseGoals([...courseGoals, {key:Math.random().toString(), value:enteredGoal}])}; // Concatenation of the array course goals, with new one 
+  const addGoalHandler = () => { setCourseGoals(currentGoals => [...currentGoals, {key:Math.random().toString(), value:enteredGoal}])}; // Guarantee we have the most updated courseGoals 
+
   return(
       <View style={styles.container}>
 
@@ -37,10 +38,20 @@ export default function App(){
           <Button title='add' onPress={addGoalHandler}/>
         </View>
 
-        <View>
-          {/* List VIEW */}
-          {courseGoals.map( (goal) => <Text key={goal} >{goal}</Text> )}
-        </View>
+        
+
+        {/* List VIEW */}
+        
+
+        {/* This woul also work, but inside a scrollview */}
+        {/* {courseGoals.map( (goal) => <View style={styles.listItem}><Text key={goal}>{goal}</Text></View> )} */}
+        <FlatList 
+          data={courseGoals} 
+          renderItem = {
+              element => (<View style={styles.listItem}><Text>{element.item.value}</Text></View>)
+          }
+        />
+        
 
       </View>
   );
@@ -58,5 +69,10 @@ const styles = StyleSheet.create({
     width: '80%', 
     borderBottomColor: 'grey',
     borderBottomWidth: 1
+  },
+  listItem:{
+    padding: 10,
+    marginVertical: 10,   //add margin to top and bottom
+    backgroundColor:'#f3f3f3',
   },
 });
