@@ -2,6 +2,7 @@ import React,{
   useState
 } from 'react';
 import {
+  Button,
   StyleSheet,
   View,
   FlatList,   // basically flatlist is like the infinity list of angular
@@ -16,10 +17,18 @@ export default function App(){
   
   const [courseGoals, setCourseGoals] = useState([]);
 
+  const  [isAddMode, setIsAddMode] = useState(false);
   
-  // This would also work
-  // const addGoalHandler = () => { setCourseGoals([...courseGoals, {key:Math.random().toString(), value:enteredGoal}])}; // Concatenation of the array course goals, with new one 
-  const addGoalHandler = (enteredGoal) => { setCourseGoals(currentGoals => [...currentGoals, {id:Math.random().toString(), value:enteredGoal}])}; // Guarantee we have the most updated courseGoals 
+  
+  
+  const addGoalHandler = (enteredGoal) => { 
+
+    // This would also work
+    // setCourseGoals([...courseGoals, {key:Math.random().toString(), value:enteredGoal}])  // Concatenation of the array course goals, with new one 
+    setCourseGoals(currentGoals => [...currentGoals, {id:Math.random().toString(), value:enteredGoal}]) // Guarantee we have the most updated courseGoals 
+
+    setIsAddMode(false);
+  }; 
 
   const removeGoalHandler = (id) => {
     setCourseGoals(
@@ -28,11 +37,13 @@ export default function App(){
       }
     );
   };
+
   return(
       <View style={styles.container}>
+        <Button title='Add new goal' onPress={() => setIsAddMode(true)}/>
 
         {/* Input VIEW */}
-        <GoalInput onAddGoal={addGoalHandler}/>      
+        <GoalInput visible={isAddMode} onCancel={()=>setIsAddMode(false)} onAddGoal={addGoalHandler}/>      
 
         {/* List VIEW */}
         
